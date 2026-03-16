@@ -20,5 +20,22 @@
   },
   "common": {
     "switchLang": "EN"
+  },
+  "montyHall": {
+    "title": "蒙提霍爾問題 (Monty Hall Problem)",
+    "description": "直覺告訴你換不換門機率都是一半？透過設定下方的參數並執行模擬，讓程式碼與數據為你揭曉反直覺的真相！",
+    "settings": "模擬設定",
+    "doors": "門的數量",
+    "doorsHint": "試著增加門的數量！你會發現換門的勝率會逼近",
+    "trials": "模擬次數",
+    "strategy": "你的策略",
+    "strategySwitch": "總是換門 💡",
+    "strategyStay": "堅持不換 🐐",
+    "runBtn": "執行模擬",
+    "winRate": "Win Rate (勝率)",
+    "wins": "Wins (抽中車)",
+    "losses": "Losses (抽中羊)",
+    "idleTitle": "設定參數並點擊執行",
+    "idleDesc": "見證機率學的奇妙之處"
   }
 }

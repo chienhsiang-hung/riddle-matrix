@@ -20,5 +20,22 @@
   },
   "common": {
     "switchLang": "中文"
+  },
+  "montyHall": {
+    "title": "Monty Hall Problem",
+    "description": "Does intuition tell you the odds are 50/50 whether you switch or not? Tweak the parameters below and run the simulation to uncover the counter-intuitive truth through code and data!",
+    "settings": "Simulation Settings",
+    "doors": "Number of Doors",
+    "doorsHint": "Try increasing the number of doors! You'll find the win rate for switching approaches",
+    "trials": "Number of Trials",
+    "strategy": "Your Strategy",
+    "strategySwitch": "Always Switch 💡",
+    "strategyStay": "Always Stay 🐐",
+    "runBtn": "Run Simulation",
+    "winRate": "Win Rate",
+    "wins": "Wins (Got a Car)",
+    "losses": "Losses (Got a Goat)",
+    "idleTitle": "Set parameters and click Run",
+    "idleDesc": "Witness the magic of probability"
   }
 }
