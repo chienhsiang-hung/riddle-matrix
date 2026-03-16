@@ -1,0 +1,24 @@
+{
+  "nav": {
+    "title": "🧩 Riddle Temple",
+    "puzzles": "Challenge Puzzles",
+    "concepts": "Knowledge Nodes"
+  },
+  "home": {
+    "heroTitle": "Explore the Ultimate Mysteries of Logic",
+    "heroSubtitle": "Ready to challenge your brain? From classic riddles to the core of cryptography, unlock the truth hidden behind numbers step by step.",
+    "startExploring": "Start Exploring",
+    "featuredPuzzles": "Featured Challenges",
+    "puzzle1": {
+      "title": "Cheryl's Birthday",
+      "desc": "Can you deduce the actual birthday from just a few conversations? A true game of logic."
+    },
+    "puzzle2": {
+      "title": "Birthday Paradox",
+      "desc": "Intuition says 23 people having the same birthday is rare? Let's reveal the shocking math."
+    }
+  },
+  "common": {
+    "switchLang": "中文"
+  }
+}
