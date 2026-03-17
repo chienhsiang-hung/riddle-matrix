@@ -58,7 +58,9 @@ export default function HomePage() {
 
       {/* --- Hero Section --- */}
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 sm:pt-32 sm:pb-32 text-center">
-        <div className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full border border-blue-100 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-400 text-xs font-bold tracking-widest uppercase animate-fade-in">
+        
+        {/* 1. 小標籤 (最先浮現) */}
+        <div className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full border border-blue-100 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-400 text-xs font-bold tracking-widest uppercase opacity-0 animate-fade-up">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
@@ -66,7 +68,8 @@ export default function HomePage() {
           Explore the Wonders of Mind
         </div>
         
-        <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-[1.1] mb-8">
+        {/* 2. 大標題 (延遲 150ms) */}
+        <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-[1.1] mb-8 opacity-0 animate-fade-up [animation-delay:150ms]">
           <span className="block text-gray-900 dark:text-white">
             {t('home.heroTitle').split(' ')[0]}
           </span>
@@ -75,11 +78,13 @@ export default function HomePage() {
           </span>
         </h1>
         
-        <p className="max-w-2xl mx-auto text-lg sm:text-xl text-gray-500 dark:text-gray-400 mb-12 leading-relaxed">
+        {/* 3. 副標題 (延遲 300ms) */}
+        <p className="max-w-2xl mx-auto text-lg sm:text-xl text-gray-500 dark:text-gray-400 mb-12 leading-relaxed opacity-0 animate-fade-up [animation-delay:300ms]">
           {t('home.heroSubtitle')}
         </p>
         
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        {/* 4. 按鈕群 (延遲 450ms) */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0 animate-fade-up [animation-delay:450ms]">
           <Link 
             href="/puzzles" 
             className="w-full sm:w-auto px-10 py-5 rounded-2xl text-lg font-bold bg-gray-900 text-white dark:bg-blue-600 dark:hover:bg-blue-500 hover:bg-gray-800 transition-all shadow-2xl shadow-blue-500/20 active:scale-95"
@@ -95,8 +100,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- Featured Puzzles --- */}
-      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      {/* --- Featured Puzzles (延遲 600ms) --- */}
+      <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 opacity-0 animate-fade-up [animation-delay:600ms]">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
             <h2 className="text-3xl sm:text-4xl font-black tracking-tight mb-4">
@@ -104,8 +109,8 @@ export default function HomePage() {
             </h2>
             <div className="h-1.5 w-20 bg-gradient-to-r from-blue-600 to-indigo-500 rounded-full"></div>
           </div>
-          <Link href="/puzzles" className="text-blue-600 dark:text-blue-400 font-bold hover:underline flex items-center gap-2">
-            View all puzzles <span>→</span>
+          <Link href="/puzzles" className="text-blue-600 dark:text-blue-400 font-bold hover:underline flex items-center gap-2 group">
+            View all puzzles <span className="group-hover:translate-x-1 transition-transform">→</span>
           </Link>
         </div>
         

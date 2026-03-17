@@ -7,6 +7,21 @@
   /* 你可以在這裡定義專屬的遊戲感色彩 */
   --color-brand-primary: #3b82f6;
   --color-brand-secondary: #6366f1;
+
+  /* 💡 定義自訂動畫名稱與時間 */
+  --animate-fade-up: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  
+  /* 💡 Tailwind v4 標準的 Keyframes 寫法 (直接寫原生 @keyframes) */
+  @keyframes fade-up {
+    0% { 
+      opacity: 0; 
+      transform: translateY(30px); 
+    }
+    100% { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
 }
 
 :root {
