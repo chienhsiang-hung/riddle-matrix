@@ -114,22 +114,36 @@ export default function HomePage() {
           </Link>
         </div>
         
-        <div className="grid sm:grid-cols-2 gap-8 lg:gap-12">
+        {/* 💡 這裡把 lg:grid-cols-2 改成 lg:grid-cols-3 來容納三張卡片 */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+          
+          {/* 第一張：雪柔的生日 */}
           <PuzzleCard 
             icon="📅"
-            title={t('home.puzzle1.title')}
-            desc={t('home.puzzle1.desc')}
+            title={t('home.puzzle1.title', '雪柔的生日')}
+            desc={t('home.puzzle1.desc', '你能單憑幾句對話，從10個日期中推導出真正的生日嗎？這是一場終極的邏輯賽局。')}
             to="/puzzles/cheryls-birthday"
             tag="Logic Deduction"
           />
           
+          {/* 第二張：蒙提霍爾問題 (新加入！) */}
+          <PuzzleCard 
+            icon="🐐"
+            title={t('montyHall.title', '蒙提霍爾問題')}
+            desc={t('montyHall.description', '直覺告訴你換不換門機率都是一半？透過模擬器讓數據為你揭曉反直覺的真相！')}
+            to="/puzzles/monty-hall"
+            tag="Probability"
+          />
+
+          {/* 第三張：生日悖論 (作為未來的預留位置) */}
           <PuzzleCard 
             icon="🎂"
-            title={t('home.puzzle2.title')}
-            desc={t('home.puzzle2.desc')}
+            title={t('home.puzzle2.title', '生日悖論')}
+            desc={t('home.puzzle2.desc', '直覺告訴你23人中兩人同生日機率很低？程式碼將為你揭露驚人的數學事實。')}
             to="/puzzles/birthday-paradox"
             tag="Probability"
           />
+          
         </div>
       </section>
     </div>
