@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { Settings2, Play, Trophy, XCircle } from 'lucide-react';

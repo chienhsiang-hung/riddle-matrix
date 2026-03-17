@@ -1,5 +1,7 @@
+'use client';
+
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 interface PuzzleCardProps {
   icon: string;
@@ -12,7 +14,7 @@ interface PuzzleCardProps {
 // 封裝謎題卡片元件
 function PuzzleCard({ icon, title, desc, to, tag }: PuzzleCardProps) {
   return (
-    <Link to={to} className="group relative block p-8 bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl hover:border-blue-100 dark:hover:border-blue-900 transition-all duration-300 hover:-translate-y-2 overflow-hidden">
+    <Link href={to} className="group relative block p-8 bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl hover:border-blue-100 dark:hover:border-blue-900 transition-all duration-300 hover:-translate-y-2 overflow-hidden">
       {/* 背景裝飾幾何圖形 (滑鼠移上去會變亮) */}
       <div className="absolute -bottom-8 -right-8 text-9xl opacity-10 group-hover:opacity-20 transition-opacity group-hover:rotate-12 duration-500">
         {icon}
@@ -67,7 +69,7 @@ export default function HomePage() {
         </p>
         
         <Link 
-          to="/puzzles" 
+          href="/puzzles" 
           className="px-10 py-4 rounded-2xl text-lg font-bold bg-gray-900 text-white dark:bg-white dark:text-gray-950 hover:bg-gray-700 dark:hover:bg-gray-200 transition-all shadow-lg hover:shadow-blue-500/20"
         >
           {t('home.startExploring')}
