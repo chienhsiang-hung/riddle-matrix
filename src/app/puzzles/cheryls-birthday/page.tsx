@@ -179,28 +179,34 @@ export default function CherylsBirthdayPuzzle() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-3 mt-auto">
-                  <button onClick={verifyAnswer} className="col-span-2 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-auto">
+                  <button onClick={verifyAnswer} className="sm:col-span-2 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all">
                     <CheckCircle2 className="w-5 h-5" /> {t('cherylsBirthday.interactive.checkAnswer')}
                   </button>
-                  <button onClick={() => { setUserEliminated([]); setVerifyStatus('idle'); }} className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold py-3 rounded-xl transition-all">
+                  <button onClick={() => { setUserEliminated([]); setVerifyStatus('idle'); }} className="w-full flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold py-3 rounded-xl transition-all">
                     <RotateCcw className="w-4 h-4" />
                     {t('cherylsBirthday.interactive.reset')}
                   </button>
-                  <button onClick={() => { setMode('solution'); setSolutionStep(0); }} className="flex items-center justify-center gap-2 bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/80 text-indigo-700 dark:text-indigo-300 font-bold py-3 rounded-xl transition-all">
-                    <Eye className="w-4 h-4" /> {t('cherylsBirthday.interactive.showSolution')}
+                  <button 
+                    onClick={() => { setMode('solution'); setSolutionStep(0); }} 
+                    className="w-full flex items-center justify-center gap-2 bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/80 text-indigo-700 dark:text-indigo-300 font-bold py-3 px-4 rounded-xl transition-all w-full"
+                  >
+                    <Eye className="w-4 h-4 flex-shrink-0" /> {/* 加入 flex-shrink-0 防止圖示被擠壓 */}
+                    <span className="text-sm sm:text-base break-words"> {/* 使用 span 包裹文字並調整手機端字體大小 */}
+                      {t('cherylsBirthday.interactive.showSolution')}
+                    </span>
                   </button>
                 </div>
               </div>
             ) : (
               // --- 系統解答模式內容 (原有的 Step-by-Step) ---
               <div className="flex flex-col h-full animate-in fade-in duration-500">
-                <div className="mb-6 flex justify-between items-center pb-4 border-b border-gray-100 dark:border-gray-800">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                    <Lightbulb className="w-6 h-6 text-yellow-500" />
+                <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-gray-100 dark:border-gray-800">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <Lightbulb className="w-5 h-5 sm:w-6 s:h-6 text-yellow-500" />
                     {currentStepInfo.title}
                   </h3>
-                  <span className="text-sm font-bold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-300 px-3 py-1 rounded-full">
+                  <span className="text-xs sm:text-sm font-bold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-300 px-3 py-1 rounded-full shrink-0">
                     Step {solutionStep}/3
                   </span>
                 </div>

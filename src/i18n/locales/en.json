@@ -80,7 +80,7 @@
     "interactive": {
       "instruction": "Your turn! Click on the date cards to cross out the impossible options.",
       "checkAnswer": "Verify Answer",
-      "showSolution": "Show Step-by-Step Logic",
+      "showSolution": "Show Solution",
       "backToChallenge": "Back to Challenge Mode",
       "success": "🎉 Congratulations! You nailed it! That's Cheryl's birthday!",
       "error": "🤔 Something's not quite right. Check the dialogue logic again?",
