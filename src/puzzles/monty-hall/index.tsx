@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { Settings2, Play, Trophy, XCircle } from 'lucide-react';
-import { useTranslation } from 'react-i18next'; // 引入翻譯 Hook
+import { Settings2, Play, Trophy, XCircle, Code, Info, Terminal } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface SimulationResult {
   wins: number;
@@ -11,12 +11,45 @@ interface SimulationResult {
   run: boolean;
 }
 
+// 預設的互動程式碼
+const DEFAULT_CODE = `// 你可以自由修改下方的變數來測試結果
+const trials = 1000;
+const doors = 3;
+const switchDoor = true;
+
+let wins = 0;
+let losses = 0;
+
+for (let i = 0; i < trials; i++) {
+  const carDoor = Math.floor(Math.random() * doors);
+  const initialPick = Math.floor(Math.random() * doors);
+
+  if (switchDoor) {
+    if (initialPick !== carDoor) wins++;
+    else losses++;
+  } else {
+    if (initialPick === carDoor) wins++;
+    else losses++;
+  }
+}
+
+// 回傳的結果會顯示在下方
+return { 
+  wins, 
+  losses, 
+  winRate: ((wins / trials) * 100).toFixed(1) + '%' 
+};`;
+
 export default function MontyHallPuzzle() {
-  const { t } = useTranslation(); // 取得 t 函式
+  const { t } = useTranslation();
   const [doors, setDoors] = useState<number>(3);
   const [trials, setTrials] = useState<number>(1000);
   const [switchDoor, setSwitchDoor] = useState<boolean>(true);
   const [results, setResults] = useState<SimulationResult>({ wins: 0, losses: 0, run: false });
+
+  // 程式碼沙盒狀態
+  const [customCode, setCustomCode] = useState<string>(DEFAULT_CODE);
+  const [codeOutput, setCodeOutput] = useState<string>('');
 
   const runSimulation = () => {
     let wins = 0;
@@ -38,6 +71,17 @@ export default function MontyHallPuzzle() {
     setResults({ wins, losses, run: true });
   };
 
+  const runCustomCode = () => {
+    try {
+      // 使用 new Function 來安全(相對)地執行使用者輸入的 JS 邏輯
+      const executeUserCode = new Function(customCode);
+      const result = executeUserCode();
+      setCodeOutput(JSON.stringify(result, null, 2));
+    } catch (error: any) {
+      setCodeOutput(`Error: ${error.message}`);
+    }
+  };
+
   const chartData = [
     { name: t('montyHall.wins'), value: results.wins, color: '#3b82f6' }, 
     { name: t('montyHall.losses'), value: results.losses, color: '#ef4444' }, 
@@ -47,17 +91,31 @@ export default function MontyHallPuzzle() {
   const expectedWinRate = ((doors - 1) / doors * 100).toFixed(1);
 
   return (
-    <div className="p-8 max-w-5xl mx-auto font-sans">
-      {/* 標題區 */}
-      <div className="mb-10 text-center">
+    <div className="p-8 max-w-5xl mx-auto font-sans space-y-8">
+      {/* 標題與說明區 */}
+      <div className="text-center">
         <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
           {t('montyHall.title')}
         </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-6">
           {t('montyHall.description')}
         </p>
       </div>
 
+      {/* 題目詳細解說卡片 */}
+      <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-2xl border border-blue-100 dark:border-blue-800">
+        <div className="flex items-center gap-2 mb-3">
+          <Info className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-xl font-bold text-blue-900 dark:text-blue-100">
+            {t('montyHall.explanationTitle')}
+          </h2>
+        </div>
+        <p className="text-blue-800 dark:text-blue-200 leading-relaxed text-sm md:text-base">
+          {t('montyHall.explanationText')}
+        </p>
+      </div>
+
+      {/* 原本的 UI 模擬器區塊 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* 左側：控制面板 */}
         <div className="bg-white dark:bg-gray-900 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors">
@@ -124,6 +182,7 @@ export default function MontyHallPuzzle() {
 
         {/* 右側：結果展示區 */}
         <div className="bg-white dark:bg-gray-900 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors flex flex-col justify-center items-center min-h-[400px]">
+          {/* ... (原本的圓餅圖展示邏輯不變，保持原樣) ... */}
           {results.run ? (
             <div className="w-full flex flex-col items-center animate-in fade-in zoom-in duration-500">
               <h3 className="text-6xl font-black text-gray-900 dark:text-white mb-2">{winRate}%</h3>
@@ -150,10 +209,8 @@ export default function MontyHallPuzzle() {
                     </Pie>
                     <Tooltip 
                       contentStyle={{ 
-                        borderRadius: '12px', 
-                        border: 'none', 
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        color: '#1f2937',
+                        borderRadius: '12px', border: 'none', 
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)', color: '#1f2937',
                         boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' 
                       }}
                     />
@@ -192,6 +249,56 @@ export default function MontyHallPuzzle() {
               <p className="text-sm">{t('montyHall.idleDesc')}</p>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* 新增的程式碼編輯器沙盒區塊 */}
+      <div className="bg-[#1e1e1e] rounded-3xl overflow-hidden shadow-lg mt-8 border border-gray-800">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800 bg-[#2d2d2d]">
+          <div className="flex items-center gap-2">
+            <Code className="w-5 h-5 text-green-400" />
+            <h3 className="font-bold text-gray-200">
+              {t('montyHall.codeSandboxTitle', '自己動手寫邏輯 (JavaScript)')}
+            </h3>
+          </div>
+          <button
+            onClick={runCustomCode}
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white text-sm font-semibold rounded-lg transition-colors"
+          >
+            <Play className="w-4 h-4" />
+            {t('montyHall.runCodeBtn', '執行程式碼')}
+          </button>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2">
+          {/* 編輯器區域 */}
+          <div className="border-r border-gray-800">
+            <textarea
+              value={customCode}
+              onChange={(e) => setCustomCode(e.target.value)}
+              spellCheck="false"
+              className="w-full h-80 bg-transparent text-gray-300 p-6 font-mono text-sm leading-relaxed outline-none resize-none focus:bg-[#252525] transition-colors"
+            />
+          </div>
+          
+          {/* 終端機輸出區域 */}
+          <div className="bg-[#151515] p-6 h-80 overflow-y-auto">
+            <div className="flex items-center gap-2 mb-4 text-gray-500">
+              <Terminal className="w-4 h-4" />
+              <span className="text-xs uppercase tracking-wider font-bold">
+                {t('montyHall.codeOutput', '執行結果：')}
+              </span>
+            </div>
+            {codeOutput ? (
+              <pre className="text-green-400 font-mono text-sm whitespace-pre-wrap break-words">
+                {codeOutput}
+              </pre>
+            ) : (
+              <p className="text-gray-600 text-sm italic font-mono">
+                {"// 點擊「執行程式碼」來看結果..."}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>
