@@ -41,6 +41,16 @@
     "wins": "勝利次數",
     "losses": "失敗次數",
     "idleTitle": "等待模擬",
-    "idleDesc": "點擊開始模擬來查看結果"
+    "idleDesc": "點擊開始模擬來查看結果",
+    "langJs": "JavaScript",
+    "langPy": "Python",
+    "executingPy": "正在載入 Python 執行環境 (Pyodide)... 首次執行可能需要幾秒鐘。",
+    "code": {
+      "jsComment1": "你可以自由修改下方的變數來測試結果",
+      "jsComment2": "回傳的結果會顯示在下方",
+      "pyComment1": "你可以自由修改下方的變數來測試結果",
+      "pyComment2": "將結果轉為 JSON 字串輸出",
+      "pyComment3": "Pyodide 會將最後一行的表達式作為執行結果回傳"
+    }
   }
 }

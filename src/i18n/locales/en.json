@@ -41,6 +41,16 @@
     "wins": "Wins",
     "losses": "Losses",
     "idleTitle": "Waiting to Simulate",
-    "idleDesc": "Click 'Run Simulation' to see the results"
+    "idleDesc": "Click 'Run Simulation' to see the results",
+    "langJs": "JavaScript",
+    "langPy": "Python",
+    "executingPy": "Loading Python environment (Pyodide)... This may take a few seconds on the first run.",
+    "code": {
+      "jsComment1": "Feel free to modify the variables below to test the results",
+      "jsComment2": "The returned result will be displayed below",
+      "pyComment1": "Feel free to modify the variables below to test the results",
+      "pyComment2": "Output the result as a JSON string",
+      "pyComment3": "Pyodide will return the last expression as the execution result"
+    }
   }
 }
