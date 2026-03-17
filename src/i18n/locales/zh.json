@@ -56,6 +56,9 @@
   "cherylsBirthday": {
     "title": "雪柔的生日 (Cheryl's Birthday)",
     "description": "艾伯特和貝爾納剛認識雪柔，他們想知道她的生日。這是一道經典的邏輯推導題，請跟著對話一步步過濾出正確答案！",
+    "premiseTitle": "📌 核心前提：他們各自知道什麼？",
+    "premiseAlbert": "艾伯特 (Albert) 只知道【月份】",
+    "premiseBernard": "貝爾納 (Bernard) 只知道【日子】",
     "step0": "初始狀態：10 個可能的日期",
     "step1": "步驟 1：艾伯特的第一句話",
     "step1Quote": "「我不知道雪柔的生日，但我知道貝爾納也不知道。」",

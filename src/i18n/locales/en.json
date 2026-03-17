@@ -56,6 +56,9 @@
   "cherylsBirthday": {
     "title": "Cheryl's Birthday",
     "description": "Albert and Bernard just met Cheryl. They want to know her birthday. Follow the conversation step by step to deduce the exact date!",
+    "premiseTitle": "📌 Core Premise: Who knows what?",
+    "premiseAlbert": "Albert ONLY knows the 【Month】",
+    "premiseBernard": "Bernard ONLY knows the 【Day】",
     "step0": "Initial State: 10 Possible Dates",
     "step1": "Step 1: Albert's First Statement",
     "step1Quote": "\"I don't know when Cheryl's birthday is, but I know that Bernard does not know too.\"",
