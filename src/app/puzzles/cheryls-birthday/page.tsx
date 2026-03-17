@@ -222,11 +222,11 @@ export default function CherylsBirthdayPuzzle() {
                 <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 grid grid-cols-2 gap-3">
                   {solutionStep < 3 ? (
                     <button onClick={() => setSolutionStep(s => s + 1)} className="col-span-2 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 rounded-xl transition-all">
-                      下一步推演 <ArrowRight className="w-5 h-5" />
+                      {t('cherylsBirthday.interactive.nextSolutionStep')} <ArrowRight className="w-5 h-5" />
                     </button>
                   ) : (
                     <button onClick={() => setSolutionStep(0)} className="col-span-2 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition-all">
-                      <RotateCcw className="w-5 h-5" /> 再看一次
+                      <RotateCcw className="w-5 h-5" /> {t('cherylsBirthday.interactive.watchAgain')}
                     </button>
                   )}
                   <button onClick={() => setMode('challenge')} className="col-span-2 mt-2 flex items-center justify-center gap-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 font-bold py-2 transition-all">

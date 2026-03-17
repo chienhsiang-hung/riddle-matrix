@@ -85,7 +85,9 @@
       "success": "🎉 Congratulations! You nailed it! That's Cheryl's birthday!",
       "error": "🤔 Something's not quite right. Check the dialogue logic again?",
       "dialogueTitle": "Full Conversation",
-      "reset": "Reset"
+      "reset": "Reset",
+      "nextSolutionStep": "Next Step",
+      "watchAgain": "Watch Again"
     }
   }
 }
