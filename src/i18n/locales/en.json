@@ -52,5 +52,27 @@
       "pyComment2": "Output the result as a JSON string",
       "pyComment3": "Pyodide will return the last expression as the execution result"
     }
+  },
+  "cherylsBirthday": {
+    "title": "Cheryl's Birthday",
+    "description": "Albert and Bernard just met Cheryl. They want to know her birthday. Follow the conversation step by step to deduce the exact date!",
+    "step0": "Initial State: 10 Possible Dates",
+    "step1": "Step 1: Albert's First Statement",
+    "step1Quote": "\"I don't know when Cheryl's birthday is, but I know that Bernard does not know too.\"",
+    "step1Explain": "Since Bernard doesn't know, the day cannot be unique (not 18 or 19). Albert is certain Bernard doesn't know, meaning his month doesn't contain any unique days. So we can eliminate May and June!",
+    "step2": "Step 2: Bernard's First Statement",
+    "step2Quote": "\"At first I didn't know when Cheryl's birthday is, but I know now.\"",
+    "step2Explain": "Bernard knows now from the remaining July and August dates. This means his day must be unique among the remaining dates. So we eliminate the duplicate day (14).",
+    "step3": "Step 3: Albert's Second Statement",
+    "step3Quote": "\"Then I also know when Cheryl's birthday is.\"",
+    "step3Explain": "Albert knows too. If his month was August, he would still have two choices (15 and 17). Therefore, his month must be July. Case closed!",
+    "reset": "Reset Puzzle",
+    "nextStep": "Apply Step",
+    "months": {
+      "May": "May",
+      "June": "June",
+      "July": "July",
+      "August": "August"
+    }
   }
 }
