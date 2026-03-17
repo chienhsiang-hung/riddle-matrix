@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import './i18n/config';
 
@@ -13,7 +13,7 @@ const ConceptList = () => <div className="p-20 text-center text-4xl font-bold da
 // 雪柔的生日 (暫時佔位，我們下一個要做這個！)
 const CherylsBirthday = () => <div className="p-20 text-center text-4xl font-bold dark:text-white">雪柔的生日 (建置中 🚧)</div>;
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <Layout />, // 💡 只要被 Layout 包住，底下所有的頁面都會有 Navbar！
