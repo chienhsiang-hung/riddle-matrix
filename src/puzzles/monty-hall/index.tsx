@@ -359,22 +359,23 @@ json.dumps({
 
       {/* 支援主題切換與 Python 的程式碼編輯器沙盒區塊 */}
       <div className="bg-white dark:bg-[#1e1e1e] rounded-3xl overflow-hidden shadow-lg mt-8 border border-gray-200 dark:border-gray-800 transition-colors">
-        <div className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#1e1e1e] transition-colors gap-4">
+        {/* 把 items-center 改為 items-start sm:items-center，讓手機版靠左對齊 */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#1e1e1e] transition-colors gap-4">
           
-          {/* 左側：標題與語言切換 */}
-          <div className="flex items-center gap-6 w-full sm:w-auto">
+          {/* 左側：標題與語言切換。手機版改為 flex-col 上下排列，避免擠壓 */}
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full sm:w-auto">
             <div className="flex items-center gap-2">
-              <Code className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+              <Code className="w-5 h-5 text-blue-500 dark:text-blue-400 shrink-0" />
               <h3 className="font-bold text-gray-800 dark:text-gray-200">
                 {t('montyHall.codeSandboxTitle', 'Code Your Own Logic')}
               </h3>
             </div>
             
-            {/* 語言切換按鈕群 */}
-            <div className="flex bg-gray-200 dark:bg-gray-800 rounded-lg p-1">
+            {/* 語言切換按鈕群：在手機版 w-full 佔滿寬度，按鈕用 flex-1 平分 */}
+            <div className="flex bg-gray-200 dark:bg-gray-800 rounded-lg p-1 w-full md:w-auto">
               <button
                 onClick={() => setCodeLang('javascript')}
-                className={`px-3 py-1 text-sm font-medium rounded-md transition-all ${
+                className={`flex-1 md:flex-none px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
                   codeLang === 'javascript' 
                     ? 'bg-white dark:bg-[#2d2d2d] text-blue-600 dark:text-blue-400 shadow-sm' 
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
@@ -384,7 +385,7 @@ json.dumps({
               </button>
               <button
                 onClick={() => setCodeLang('python')}
-                className={`px-3 py-1 text-sm font-medium rounded-md transition-all ${
+                className={`flex-1 md:flex-none px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
                   codeLang === 'python' 
                     ? 'bg-white dark:bg-[#2d2d2d] text-blue-600 dark:text-blue-400 shadow-sm' 
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
@@ -398,7 +399,7 @@ json.dumps({
           <button
             onClick={runCustomCode}
             disabled={isRunningCode}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
           >
             <Play className={`w-4 h-4 ${isRunningCode ? 'animate-pulse' : ''}`} />
             {isRunningCode ? 'Running...' : t('montyHall.runCodeBtn', 'Run Code')}
