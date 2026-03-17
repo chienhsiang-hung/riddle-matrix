@@ -76,6 +76,16 @@
       "June": "6月",
       "July": "7月",
       "August": "8月"
+    },
+    "interactive": {
+      "instruction": "你的回合！請點擊另一側的日期卡片，將你認為「不可能」的選項畫叉排除。",
+      "checkAnswer": "驗證答案",
+      "showSolution": "放棄，看邏輯推演",
+      "backToChallenge": "回到挑戰模式",
+      "success": "🎉 恭喜你！完全正確！這就是雪柔的生日！",
+      "error": "🤔 好像不太對喔，再仔細推敲一下對話的邏輯？",
+      "dialogueTitle": "完整對話內容",
+      "reset": "重置"
     }
   }
 }

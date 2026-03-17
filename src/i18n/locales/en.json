@@ -76,6 +76,16 @@
       "June": "June",
       "July": "July",
       "August": "August"
+    },
+    "interactive": {
+      "instruction": "Your turn! Click on the date cards to cross out the impossible options.",
+      "checkAnswer": "Verify Answer",
+      "showSolution": "Show Step-by-Step Logic",
+      "backToChallenge": "Back to Challenge Mode",
+      "success": "🎉 Congratulations! You nailed it! That's Cheryl's birthday!",
+      "error": "🤔 Something's not quite right. Check the dialogue logic again?",
+      "dialogueTitle": "Full Conversation",
+      "reset": "Reset"
     }
   }
 }

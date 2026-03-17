@@ -2,11 +2,24 @@
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, RotateCcw, Lightbulb, MessageCircle, CalendarCheck, UserSearch } from 'lucide-react';
+import { 
+  ArrowRight, RotateCcw, Lightbulb, MessageCircle, UserSearch, 
+  CheckCircle2, XCircle, Eye, MousePointerClick, User 
+} from 'lucide-react';
 
 export default function CherylsBirthdayPuzzle() {
   const { t } = useTranslation();
-  const [step, setStep] = useState(0);
+  
+  // 模式切換：'challenge' (玩家自己玩) | 'solution' (看解答)
+  const [mode, setMode] = useState<'challenge' | 'solution'>('challenge');
+  
+  // 玩家自己標記排除的日期 (儲存格式: "Month-Day")
+  const [userEliminated, setUserEliminated] = useState<string[]>([]);
+  // 驗證狀態
+  const [verifyStatus, setVerifyStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  // 解答模式的進度
+  const [solutionStep, setSolutionStep] = useState(0);
 
   const dates = [
     { month: 'May', day: 15 }, { month: 'May', day: 16 }, { month: 'May', day: 19 },
@@ -15,15 +28,36 @@ export default function CherylsBirthdayPuzzle() {
     { month: 'August', day: 14 }, { month: 'August', day: 15 }, { month: 'August', day: 17 }
   ];
 
-  const isEliminated = (month: string, day: number) => {
-    if (step >= 1 && (month === 'May' || month === 'June')) return true;
-    if (step >= 2 && day === 14) return true;
-    if (step >= 3 && month === 'August') return true;
+  // ---------------- 玩家挑戰模式邏輯 ----------------
+  const toggleDate = (month: string, day: number) => {
+    if (mode !== 'challenge') return;
+    const id = `${month}-${day}`;
+    setUserEliminated(prev => 
+      prev.includes(id) ? prev.filter(d => d !== id) : [...prev, id]
+    );
+    setVerifyStatus('idle'); // 只要重新點擊就重置驗證狀態
+  };
+
+  const verifyAnswer = () => {
+    // 檢查是否排除了 9 個，且剩下的唯一一個是 July-16
+    const leftDates = dates.filter(d => !userEliminated.includes(`${d.month}-${d.day}`));
+    if (leftDates.length === 1 && leftDates[0].month === 'July' && leftDates[0].day === 16) {
+      setVerifyStatus('success');
+    } else {
+      setVerifyStatus('error');
+    }
+  };
+
+  // ---------------- 系統解答模式邏輯 ----------------
+  const isSystemEliminated = (month: string, day: number) => {
+    if (solutionStep >= 1 && (month === 'May' || month === 'June')) return true;
+    if (solutionStep >= 2 && day === 14) return true;
+    if (solutionStep >= 3 && month === 'August') return true;
     return false;
   };
 
-  const isAnswer = (month: string, day: number) => {
-    return step === 3 && month === 'July' && day === 16;
+  const isSystemAnswer = (month: string, day: number) => {
+    return solutionStep === 3 && month === 'July' && day === 16;
   };
 
   const stepsInfo = [
@@ -33,11 +67,31 @@ export default function CherylsBirthdayPuzzle() {
     { title: t('cherylsBirthday.step3', '步驟 3'), quote: t('cherylsBirthday.step3Quote'), explain: t('cherylsBirthday.step3Explain'), speaker: 'Albert' }
   ];
 
-  const currentStepInfo = stepsInfo[step];
+  const currentStepInfo = stepsInfo[solutionStep];
+
+  // 2. 建立一個內部使用的 Avatar 元件，方便管理顏色
+  const CharacterAvatar = ({ name }: { name: string }) => {
+    const isAlbert = name === 'Albert';
+    return (
+      <div className="flex items-center gap-2 mb-2">
+        <div className={`p-1.5 rounded-full ${
+          isAlbert 
+            ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400' 
+            : 'bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400'
+        }`}>
+          <User className="w-4 h-4" />
+        </div>
+        <p className={`text-xs font-bold uppercase tracking-wide ${
+          isAlbert ? 'text-blue-600 dark:text-blue-400' : 'text-orange-600 dark:text-orange-400'
+        }`}>
+          {name}
+        </p>
+      </div>
+    );
+  };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto font-sans">
-      {/* 標題區 */}
+    <div className="p-8 max-w-7xl mx-auto font-sans">
       <div className="mb-10 text-center">
         <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
           {t('cherylsBirthday.title')}
@@ -49,10 +103,10 @@ export default function CherylsBirthdayPuzzle() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         
-        {/* 左側：邏輯對話控制台 */}
+        {/* 左側：控制台與對話 */}
         <div className="lg:col-span-5 flex flex-col gap-6">
           
-          {/* 💡 新增：核心前提情報卡 */}
+          {/* 前提情報卡 */}
           <div className="bg-indigo-50 dark:bg-indigo-950/30 p-6 rounded-3xl border border-indigo-100 dark:border-indigo-900/50 shadow-sm">
             <h3 className="text-lg font-bold text-indigo-900 dark:text-indigo-200 mb-4 flex items-center gap-2">
               <UserSearch className="w-5 h-5" />
@@ -61,114 +115,167 @@ export default function CherylsBirthdayPuzzle() {
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-3 bg-white dark:bg-gray-900 px-4 py-3 rounded-xl border border-indigo-100 dark:border-indigo-800 shadow-sm">
                 <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                <span className="font-semibold text-gray-800 dark:text-gray-200 text-sm">
-                  {t('cherylsBirthday.premiseAlbert')}
-                </span>
+                <span className="font-semibold text-gray-800 dark:text-gray-200 text-sm">{t('cherylsBirthday.premiseAlbert')}</span>
               </div>
               <div className="flex items-center gap-3 bg-white dark:bg-gray-900 px-4 py-3 rounded-xl border border-indigo-100 dark:border-indigo-800 shadow-sm">
                 <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                <span className="font-semibold text-gray-800 dark:text-gray-200 text-sm">
-                  {t('cherylsBirthday.premiseBernard')}
-                </span>
+                <span className="font-semibold text-gray-800 dark:text-gray-200 text-sm">{t('cherylsBirthday.premiseBernard')}</span>
               </div>
             </div>
           </div>
 
-          {/* 執行區塊 */}
-          <div className="bg-white dark:bg-gray-900 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col flex-grow">
-            <div className="mb-6 flex justify-between items-center pb-4 border-b border-gray-100 dark:border-gray-800">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                <MessageCircle className="w-6 h-6 text-blue-500" />
-                {currentStepInfo.title}
-              </h3>
-              <span className="text-sm font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 px-3 py-1 rounded-full">
-                Step {step}/3
-              </span>
-            </div>
-
-            <div className="flex-grow">
-              {step > 0 ? (
-                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-2xl border border-blue-100 dark:border-blue-800/50 relative">
-                    <div className="absolute -left-3 top-6 w-0 h-0 border-t-[10px] border-t-transparent border-r-[15px] border-r-blue-50 dark:border-r-blue-900/20 border-b-[10px] border-b-transparent"></div>
-                    <p className="text-sm font-bold text-blue-600 dark:text-blue-400 mb-2 uppercase tracking-wide flex items-center gap-2">
-                      {currentStepInfo.speaker}
-                    </p>
-                    <p className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                      {currentStepInfo.quote}
-                    </p>
-                  </div>
-
-                  <div className="flex items-start gap-4 p-5 bg-yellow-50 dark:bg-yellow-900/10 rounded-2xl border border-yellow-200 dark:border-yellow-900/30">
-                    <Lightbulb className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-1" />
-                    <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-medium">
-                      {currentStepInfo.explain}
-                    </p>
+          {/* 主要互動區 */}
+          <div className="bg-white dark:bg-gray-900 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col flex-grow relative overflow-hidden">
+            
+            {mode === 'challenge' ? (
+              // --- 挑戰模式內容 ---
+              <div className="flex flex-col h-full animate-in fade-in duration-500">
+                {/* 💡 醒目的動畫操作提示 */}
+                <div className="mb-6 relative group">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+                  <div className="relative p-4 bg-white dark:bg-gray-800 ring-1 ring-gray-900/5 dark:ring-white/10 rounded-2xl flex items-start sm:items-center gap-4">
+                    <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex-shrink-0 animate-bounce">
+                      <MousePointerClick className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-gray-900 dark:text-white text-base mb-0.5">
+                        {t('cherylsBirthday.interactive.instruction').split('！')[0]}！
+                      </h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                        {t('cherylsBirthday.interactive.instruction').split('！')[1]}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              ) : (
-                <div className="h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 space-y-4 py-6">
-                  <CalendarCheck className="w-16 h-16 opacity-20" />
-                  <p className="text-center font-medium">請詳閱上方情報後，點擊下方按鈕開始推理</p>
+                
+                <div className="space-y-4 mb-8 flex-grow">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800/50">
+                    <CharacterAvatar name="Albert" />
+                    <p className="text-gray-800 dark:text-gray-200 font-medium">{t('cherylsBirthday.step1Quote')}</p>
+                  </div>
+                  <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-xl border border-orange-100 dark:border-orange-800/50">
+                    <CharacterAvatar name="Bernard" />
+                    <p className="text-gray-800 dark:text-gray-200 font-medium">{t('cherylsBirthday.step2Quote')}</p>
+                  </div>
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800/50">
+                    <CharacterAvatar name="Albert" />
+                    <p className="text-gray-800 dark:text-gray-200 font-medium">{t('cherylsBirthday.step3Quote')}</p>
+                  </div>
                 </div>
-              )}
-            </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
-              {step < 3 ? (
-                <button
-                  onClick={() => setStep(s => s + 1)}
-                  className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-blue-500/30 transition-all active:scale-[0.98]"
-                >
-                  {t('cherylsBirthday.nextStep', '執行此步驟')}
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              ) : (
-                <button
-                  onClick={() => setStep(0)}
-                  className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-green-500/30 transition-all active:scale-[0.98]"
-                >
-                  <RotateCcw className="w-5 h-5" />
-                  {t('cherylsBirthday.reset', '重新挑戰')}
-                </button>
-              )}
-            </div>
+                <p className="text-sm font-bold text-gray-500 mb-4">{t('cherylsBirthday.interactive.instruction')}</p>
+
+                {verifyStatus === 'success' && (
+                  <div className="mb-4 p-4 bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300 rounded-xl flex items-center gap-3 animate-in slide-in-from-bottom-2">
+                    <CheckCircle2 className="w-6 h-6 shrink-0" />
+                    <span className="font-bold">{t('cherylsBirthday.interactive.success')}</span>
+                  </div>
+                )}
+
+                {verifyStatus === 'error' && (
+                  <div className="mb-4 p-4 bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 rounded-xl flex items-center gap-3 animate-in slide-in-from-bottom-2">
+                    <XCircle className="w-6 h-6 shrink-0" />
+                    <span className="font-bold">{t('cherylsBirthday.interactive.error')}</span>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-3 mt-auto">
+                  <button onClick={verifyAnswer} className="col-span-2 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all">
+                    <CheckCircle2 className="w-5 h-5" /> {t('cherylsBirthday.interactive.checkAnswer')}
+                  </button>
+                  <button onClick={() => { setUserEliminated([]); setVerifyStatus('idle'); }} className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold py-3 rounded-xl transition-all">
+                    <RotateCcw className="w-4 h-4" />
+                    {t('cherylsBirthday.interactive.reset')}
+                  </button>
+                  <button onClick={() => { setMode('solution'); setSolutionStep(0); }} className="flex items-center justify-center gap-2 bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900/50 dark:hover:bg-indigo-800/80 text-indigo-700 dark:text-indigo-300 font-bold py-3 rounded-xl transition-all">
+                    <Eye className="w-4 h-4" /> {t('cherylsBirthday.interactive.showSolution')}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              // --- 系統解答模式內容 (原有的 Step-by-Step) ---
+              <div className="flex flex-col h-full animate-in fade-in duration-500">
+                <div className="mb-6 flex justify-between items-center pb-4 border-b border-gray-100 dark:border-gray-800">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <Lightbulb className="w-6 h-6 text-yellow-500" />
+                    {currentStepInfo.title}
+                  </h3>
+                  <span className="text-sm font-bold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-300 px-3 py-1 rounded-full">
+                    Step {solutionStep}/3
+                  </span>
+                </div>
+
+                <div className="flex-grow">
+                  {solutionStep > 0 && (
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                      <div className="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-800/50 relative">
+                        <CharacterAvatar name={currentStepInfo.speaker} />
+                        <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">{currentStepInfo.quote}</p>
+                      </div>
+                      <div className="flex items-start gap-4 p-5 bg-yellow-50 dark:bg-yellow-900/10 rounded-2xl border border-yellow-200 dark:border-yellow-900/30">
+                        <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-medium">{currentStepInfo.explain}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800 grid grid-cols-2 gap-3">
+                  {solutionStep < 3 ? (
+                    <button onClick={() => setSolutionStep(s => s + 1)} className="col-span-2 flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 rounded-xl transition-all">
+                      下一步推演 <ArrowRight className="w-5 h-5" />
+                    </button>
+                  ) : (
+                    <button onClick={() => setSolutionStep(0)} className="col-span-2 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition-all">
+                      <RotateCcw className="w-5 h-5" /> 再看一次
+                    </button>
+                  )}
+                  <button onClick={() => setMode('challenge')} className="col-span-2 mt-2 flex items-center justify-center gap-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 font-bold py-2 transition-all">
+                    {t('cherylsBirthday.interactive.backToChallenge')}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* 右側：日期矩陣 (保留原有的酷炫動畫) */}
+        {/* 右側：日期矩陣 */}
         <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-max">
           {dates.map((date) => {
-            const eliminated = isEliminated(date.month, date.day);
-            const answer = isAnswer(date.month, date.day);
-            
+            const isEliminated = mode === 'challenge' 
+              ? userEliminated.includes(`${date.month}-${date.day}`)
+              : isSystemEliminated(date.month, date.day);
+              
+            const isAnswer = mode === 'solution' && isSystemAnswer(date.month, date.day);
+            const isUserFinalPick = mode === 'challenge' && verifyStatus === 'success' && !isEliminated;
+
             return (
               <div
                 key={`${date.month}-${date.day}`}
-                className={`relative p-6 rounded-3xl border-2 transition-all duration-700 flex flex-col items-center justify-center
-                  ${answer 
+                onClick={() => toggleDate(date.month, date.day)}
+                className={`relative p-6 rounded-3xl border-2 transition-all duration-300 flex flex-col items-center justify-center
+                  ${mode === 'challenge' ? 'cursor-pointer hover:scale-105' : ''}
+                  ${(isAnswer || isUserFinalPick)
                     ? 'border-green-500 bg-green-50 dark:bg-green-900/30 shadow-[0_0_30px_rgba(34,197,94,0.3)] scale-105 z-10' 
-                    : eliminated
+                    : isEliminated
                       ? 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 opacity-40 grayscale scale-95'
-                      : 'border-blue-100 dark:border-blue-900/50 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md hover:-translate-y-1'
+                      : 'border-blue-100 dark:border-blue-900/50 bg-white dark:bg-gray-800 shadow-sm hover:border-blue-400 dark:hover:border-blue-500'
                   }
                 `}
               >
                 <div className={`text-sm font-bold uppercase tracking-widest mb-2 transition-colors duration-500
-                  ${answer ? 'text-green-600 dark:text-green-400' 
-                    : eliminated ? 'text-gray-400' : 'text-blue-500 dark:text-blue-400'}
+                  ${(isAnswer || isUserFinalPick) ? 'text-green-600 dark:text-green-400' : isEliminated ? 'text-gray-400' : 'text-blue-500 dark:text-blue-400'}
                 `}>
                   {t(`cherylsBirthday.months.${date.month}`, date.month)}
                 </div>
                 <div className="relative">
                   <div className={`text-5xl font-black transition-colors duration-500 
-                    ${answer ? 'text-green-600 dark:text-green-400' 
-                      : eliminated ? 'text-gray-400' : 'text-gray-900 dark:text-white'}
+                    ${(isAnswer || isUserFinalPick) ? 'text-green-600 dark:text-green-400' : isEliminated ? 'text-gray-400' : 'text-gray-900 dark:text-white'}
                   `}>
                     {date.day}
                   </div>
-                  {eliminated && (
-                    <div className="absolute top-1/2 -translate-y-1/2 left-[-20%] right-[-20%] h-1.5 bg-red-500 rounded-full rotate-[-15deg] animate-in zoom-in duration-300"></div>
+                  {/* 紅色刪除線動畫 */}
+                  {isEliminated && (
+                    <div className="absolute top-1/2 -translate-y-1/2 left-[-20%] right-[-20%] h-1.5 bg-red-500 rounded-full rotate-[-15deg] animate-in zoom-in duration-200"></div>
                   )}
                 </div>
               </div>
