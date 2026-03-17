@@ -222,7 +222,7 @@ export default function CherylsBirthdayPuzzle() {
                         {t('cherylsBirthday.step0Guide', '點擊下方按鈕開始逐步解析邏輯')}
                       </p>
                     </div>
-                  ) : (
+                  ) : (solutionStep > 0) && (
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                       <div className="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-800/50 relative">
                         <CharacterAvatar name={currentStepInfo.speaker} />

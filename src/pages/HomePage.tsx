@@ -2,6 +2,7 @@
 
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 interface PuzzleCardProps {
   icon: string;
@@ -12,9 +13,9 @@ interface PuzzleCardProps {
 }
 
 // 封裝謎題卡片元件
-function PuzzleCard({ icon, title, desc, to, tag }: PuzzleCardProps) {
+function PuzzleCard({ icon, title, desc, to, tag, lng }: PuzzleCardProps & { lng: string }) {
   return (
-    <Link href={to} className="group relative block p-8 bg-white dark:bg-gray-900 rounded-[2rem] border border-gray-100 dark:border-gray-800 shadow-xl shadow-gray-200/50 dark:shadow-none hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:border-blue-900 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+    <Link href={`/${lng}${to}`} className="group relative block p-8 bg-white dark:bg-gray-900 rounded-[2rem] border border-gray-100 dark:border-gray-800 shadow-xl shadow-gray-200/50 dark:shadow-none hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:border-blue-900 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
       {/* 背景裝飾幾何圖形 (滑鼠移上去會變亮) */}
       <div className="absolute -bottom-6 -right-6 text-9xl opacity-[0.03] dark:opacity-[0.05] group-hover:opacity-10 dark:group-hover:opacity-20 transition-all group-hover:rotate-12 group-hover:scale-110 duration-700">
         {icon}
@@ -48,6 +49,8 @@ function PuzzleCard({ icon, title, desc, to, tag }: PuzzleCardProps) {
 
 export default function HomePage() {
   const { t } = useTranslation();
+  const params = useParams();
+  const lng = params?.lng as string || 'en';
 
   return (
     <div className="relative overflow-hidden bg-white dark:bg-gray-950">
@@ -86,13 +89,13 @@ export default function HomePage() {
         {/* 4. 按鈕群 (延遲 450ms) */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0 animate-fade-up [animation-delay:450ms]">
           <Link 
-            href="/puzzles" 
+            href={`/${lng}/puzzles`}
             className="w-full sm:w-auto px-10 py-5 rounded-2xl text-lg font-bold bg-gray-900 text-white dark:bg-blue-600 dark:hover:bg-blue-500 hover:bg-gray-800 transition-all shadow-2xl shadow-blue-500/20 active:scale-95"
           >
             {t('home.startExploring')}
           </Link>
           <Link 
-            href="/concepts" 
+            href={`/${lng}/concepts`}
             className="w-full sm:w-auto px-10 py-5 rounded-2xl text-lg font-bold bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all active:scale-95"
           >
             Learn Concepts
@@ -124,6 +127,7 @@ export default function HomePage() {
             desc={t('home.puzzle1.desc', '你能單憑幾句對話，從10個日期中推導出真正的生日嗎？這是一場終極的邏輯賽局。')}
             to="/puzzles/cheryls-birthday"
             tag="Logic Deduction"
+            lng={lng}
           />
           
           {/* 第二張：蒙提霍爾問題 (新加入！) */}
@@ -133,6 +137,7 @@ export default function HomePage() {
             desc={t('montyHall.description', '直覺告訴你換不換門機率都是一半？透過模擬器讓數據為你揭曉反直覺的真相！')}
             to="/puzzles/monty-hall"
             tag="Probability"
+            lng={lng}
           />
 
           {/* 第三張：生日悖論 (作為未來的預留位置) */}
@@ -142,6 +147,7 @@ export default function HomePage() {
             desc={t('home.puzzle2.desc', '直覺告訴你23人中兩人同生日機率很低？程式碼將為你揭露驚人的數學事實。')}
             to="/puzzles/birthday-paradox"
             tag="Probability"
+            lng={lng}
           />
           
         </div>

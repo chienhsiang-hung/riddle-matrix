@@ -1,23 +1,18 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 import enTranslations from './locales/en.json';
 import zhTranslations from './locales/zh.json';
 
 i18n
-  .use(LanguageDetector) // 加入偵測器
   .use(initReactI18next)
   .init({
     resources: {
       en: { translation: enTranslations },
       zh: { translation: zhTranslations }
     },
-    fallbackLng: 'en',
+    fallbackLng: 'zh', // 預設語言
+    lng: 'zh',         // 初始化語言
     interpolation: { escapeValue: false },
-    detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
-    }
   });
 
 export default i18n;

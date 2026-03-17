@@ -3,9 +3,12 @@
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Play } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
 export default function PuzzleListPage() {
   const { t } = useTranslation();
+  const params = useParams();
+  const lng = params?.lng as string || 'en';
 
   // 謎題清單資料
   const puzzles = [
@@ -14,7 +17,7 @@ export default function PuzzleListPage() {
       title: t('cherylsBirthday.title', '雪柔的生日'),
       desc: t('cherylsBirthday.description', '艾伯特和貝爾納剛認識雪柔，他們想知道她的生日。這是一道經典的邏輯推導題...'),
       icon: '📅',
-      path: '/puzzles/cheryls-birthday',
+      path: `/${lng}/puzzles/cheryls-birthday`,
       color: 'from-blue-500 to-indigo-400',
       tag: 'Logic'
     },
@@ -23,7 +26,7 @@ export default function PuzzleListPage() {
       title: t('montyHall.title', '蒙提霍爾問題'),
       desc: t('montyHall.description', '直覺告訴你換不換門機率都是一半？透過設定下方的參數並執行模擬揭曉真相！'),
       icon: '🐐',
-      path: '/puzzles/monty-hall',
+      path: `/${lng}/puzzles/monty-hall`,
       color: 'from-green-500 to-emerald-400',
       tag: 'Probability'
     }

@@ -1,27 +1,33 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation'; // 💡 引入 navigation Hook
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../contexts/ThemeContext';
-import '../i18n/config';
+import i18n from '../i18n/config';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const { t, i18n } = useTranslation();
+export default function Layout({ children, lng }: { children: React.ReactNode; lng: string }) {
+  const { t } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
+  // 💡 在渲染前，強制將 i18n 切換到當前網址的語言 (確保 SSG 編譯正確)
+  if (i18n.language !== lng) {
+    i18n.changeLanguage(lng);
+  }
+
+  // 切換語言邏輯：把網址上的 /zh/... 替換成 /en/...
   const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === 'zh' ? 'en' : 'zh');
+    const nextLang = lng === 'zh' ? 'en' : 'zh';
+    const newPathname = pathname?.replace(`/${lng}`, `/${nextLang}`);
+    router.push(newPathname || `/${nextLang}`);
   };
 
-  // Close menu when resizing to desktop
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsMenuOpen(false);
-      }
-    };
+    const handleResize = () => { if (window.innerWidth >= 768) setIsMenuOpen(false); };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -31,7 +37,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-gray-950/80 border-b border-gray-200 dark:border-gray-800 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 sm:h-20">
-            <Link href="/" className="flex items-center gap-2 group">
+            <Link href={`/${lng}`} className="flex items-center gap-2 group">
               <span className="text-3xl group-hover:rotate-12 transition-transform duration-300">🧩</span>
               <span className="text-xl sm:text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
                 {t('nav.title')}
@@ -40,8 +46,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex gap-8 items-center font-semibold text-gray-600 dark:text-gray-400 text-sm tracking-wide uppercase">
-              <Link href="/puzzles" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{t('nav.puzzles')}</Link>
-              <Link href="/concepts" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{t('nav.concepts')}</Link>
+              <Link href={`/${lng}/puzzles`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{t('nav.puzzles')}</Link>
+              <Link href={`/${lng}/concepts`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{t('nav.concepts')}</Link>
               
               <div className="flex items-center gap-3 border-l border-gray-200 dark:border-gray-800 pl-6 ml-2">
                 <button 
@@ -87,14 +93,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMenuOpen ? 'max-h-64 border-b border-gray-200 dark:border-gray-800' : 'max-h-0'}`}>
           <div className="px-4 pt-2 pb-6 space-y-2 bg-white/90 dark:bg-gray-950/90 backdrop-blur-lg">
             <Link 
-              href="/puzzles" 
+              href={`/${lng}/puzzles`}
               className="block px-4 py-3 rounded-xl font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900"
               onClick={() => setIsMenuOpen(false)}
             >
               {t('nav.puzzles')}
             </Link>
             <Link 
-              href="/concepts" 
+              href={`/${lng}/concepts`} 
               className="block px-4 py-3 rounded-xl font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -127,8 +133,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <span className="font-bold tracking-tight text-gray-900 dark:text-white">Riddle Temple</span>
             </div>
             <div className="flex gap-8 text-sm font-medium text-gray-500 dark:text-gray-400">
-              <Link href="/puzzles" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Puzzles</Link>
-              <Link href="/concepts" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Concepts</Link>
+              <Link href={`/${lng}/puzzles`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Puzzles</Link>
+              <Link href={`/${lng}/concepts`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Concepts</Link>
               <a href="https://github.com/chienhsiang-hung/riddle-matrix" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">GitHub</a>
             </div>
             <div className="text-sm text-gray-400 dark:text-gray-600 font-medium">
