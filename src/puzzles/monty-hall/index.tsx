@@ -5,6 +5,11 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import { Settings2, Play, Trophy, XCircle, Code, Info, Terminal } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+// 引入 CodeMirror 相關套件
+import CodeMirror from '@uiw/react-codemirror';
+import { javascript } from '@codemirror/lang-javascript';
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+
 interface SimulationResult {
   wins: number;
   losses: number;
@@ -73,7 +78,6 @@ export default function MontyHallPuzzle() {
 
   const runCustomCode = () => {
     try {
-      // 使用 new Function 來安全(相對)地執行使用者輸入的 JS 邏輯
       const executeUserCode = new Function(customCode);
       const result = executeUserCode();
       setCodeOutput(JSON.stringify(result, null, 2));
@@ -182,7 +186,6 @@ export default function MontyHallPuzzle() {
 
         {/* 右側：結果展示區 */}
         <div className="bg-white dark:bg-gray-900 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 transition-colors flex flex-col justify-center items-center min-h-[400px]">
-          {/* ... (原本的圓餅圖展示邏輯不變，保持原樣) ... */}
           {results.run ? (
             <div className="w-full flex flex-col items-center animate-in fade-in zoom-in duration-500">
               <h3 className="text-6xl font-black text-gray-900 dark:text-white mb-2">{winRate}%</h3>
@@ -204,7 +207,7 @@ export default function MontyHallPuzzle() {
                       stroke="none"
                     >
                       {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                        <Cell key={`cell-\${index}`} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip 
@@ -252,50 +255,57 @@ export default function MontyHallPuzzle() {
         </div>
       </div>
 
-      {/* 新增的程式碼編輯器沙盒區塊 */}
+      {/* 程式碼編輯器沙盒區塊 */}
       <div className="bg-[#1e1e1e] rounded-3xl overflow-hidden shadow-lg mt-8 border border-gray-800">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800 bg-[#2d2d2d]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800 bg-[#1e1e1e]">
           <div className="flex items-center gap-2">
-            <Code className="w-5 h-5 text-green-400" />
+            <Code className="w-5 h-5 text-blue-400" />
             <h3 className="font-bold text-gray-200">
-              {t('montyHall.codeSandboxTitle', '自己動手寫邏輯 (JavaScript)')}
+              {t('montyHall.codeSandboxTitle', 'Code Your Own Logic (JavaScript)')}
             </h3>
           </div>
           <button
             onClick={runCustomCode}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white text-sm font-semibold rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-lg transition-colors"
           >
             <Play className="w-4 h-4" />
-            {t('montyHall.runCodeBtn', '執行程式碼')}
+            {t('montyHall.runCodeBtn', 'Run Code')}
           </button>
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2">
-          {/* 編輯器區域 */}
+          {/* 左側：CodeMirror 編輯器 */}
           <div className="border-r border-gray-800">
-            <textarea
+            <CodeMirror
               value={customCode}
-              onChange={(e) => setCustomCode(e.target.value)}
-              spellCheck="false"
-              className="w-full h-80 bg-transparent text-gray-300 p-6 font-mono text-sm leading-relaxed outline-none resize-none focus:bg-[#252525] transition-colors"
+              height="320px"
+              theme={vscodeDark}
+              extensions={[javascript({ jsx: false })]}
+              onChange={(value) => setCustomCode(value)}
+              className="text-sm"
+              basicSetup={{
+                lineNumbers: true,
+                highlightActiveLineGutter: true,
+                foldGutter: true,
+              }}
             />
           </div>
           
-          {/* 終端機輸出區域 */}
-          <div className="bg-[#151515] p-6 h-80 overflow-y-auto">
+          {/* 右側：終端機輸出區域 */}
+          <div className="bg-[#151515] p-6 h-[320px] overflow-y-auto">
             <div className="flex items-center gap-2 mb-4 text-gray-500">
               <Terminal className="w-4 h-4" />
               <span className="text-xs uppercase tracking-wider font-bold">
-                {t('montyHall.codeOutput', '執行結果：')}
+                {t('montyHall.codeOutput', 'Output:')}
               </span>
             </div>
             {codeOutput ? (
-              <pre className="text-green-400 font-mono text-sm whitespace-pre-wrap break-words">
+              <pre className="text-blue-400 font-mono text-sm whitespace-pre-wrap break-words">
                 {codeOutput}
               </pre>
             ) : (
               <p className="text-gray-600 text-sm italic font-mono">
-                {"// 點擊「執行程式碼」來看結果..."}
+                {"// Click 'Run Code' to see the output..."}
               </p>
             )}
           </div>
