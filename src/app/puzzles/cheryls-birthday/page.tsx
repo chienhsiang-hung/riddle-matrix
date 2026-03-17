@@ -212,7 +212,17 @@ export default function CherylsBirthdayPuzzle() {
                 </div>
 
                 <div className="flex-grow">
-                  {solutionStep > 0 && (
+                  {solutionStep === 0 ? (
+                    // 為 Step 0 增加一個引導視窗，避免畫面塌陷
+                    <div className="flex flex-col items-center justify-center h-full py-10 text-center animate-in fade-in duration-500">
+                      <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-full mb-4">
+                        <Lightbulb className="w-8 h-8 text-indigo-500" />
+                      </div>
+                      <p className="text-gray-500 dark:text-gray-400 font-medium">
+                        {t('cherylsBirthday.step0Guide', '點擊下方按鈕開始逐步解析邏輯')}
+                      </p>
+                    </div>
+                  ) : (
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                       <div className="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-800/50 relative">
                         <CharacterAvatar name={currentStepInfo.speaker} />

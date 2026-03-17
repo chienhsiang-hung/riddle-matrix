@@ -59,6 +59,7 @@
     "premiseTitle": "📌 Core Premise: Who knows what?",
     "premiseAlbert": "Albert ONLY knows the 【Month】",
     "premiseBernard": "Bernard ONLY knows the 【Day】",
+    "step0Guide": "Click the 'Next Step' button to begin the logical deduction process.",
     "step0": "Initial State: 10 Possible Dates",
     "step1": "Step 1: Albert's First Statement",
     "step1Quote": "\"I don't know when Cheryl's birthday is, but I know that Bernard does not know too.\"",
