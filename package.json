@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "homepage": "https:/<chienhsiang-hung.github.io/riddle-matrix",
+  "homepage": "https://chienhsiang-hung.github.io/riddle-matrix",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
